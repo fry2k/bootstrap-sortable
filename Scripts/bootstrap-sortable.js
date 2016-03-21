@@ -54,9 +54,10 @@
         sortEngine = options.customSort || sortEngine || defaultSortEngine;
 
         emptyEnd = options.emptyEnd;
+		var selector = (options.selector)? options.selector : 'table.sortable';
 
         // Set attributes needed for sorting
-        $('table.sortable').each(function () {
+        $(selector).each(function () {
             var $this = $(this);
             var applyLast = (options.applyLast === true);
             $this.find('span.sign').remove();
@@ -143,13 +144,12 @@
                 }
             });
             $this.trigger('sorted');
-        });
+        }).on('click', '>thead th[data-defaultsort!="disabled"]', function (/*e*/) {
+			// Add click event to table header
+			sortByColumn(this);
+		});
     }
 
-    // Add click event to table header
-    $document.on('click', 'table.sortable>thead th[data-defaultsort!="disabled"]', function (e) {
-        sortByColumn(this);
-    });
 
     // element is the header of the column to sort (the clicked header)
     function sortByColumn(element) {
